@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+
+# Virtualenv
+env/
+ENV/
+
+# Redis & Qdrant volumes (local only)
+redis-data/
+qdrant-data/
+
+# IDE
+.vscode/
+.idea/
