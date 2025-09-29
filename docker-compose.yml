@@ -1,3 +1,31 @@
+version: '3.9'
+
+services:
+  redis:
+    image: redis:7
+    container_name: chatbot-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+
+  qdrant:
+    image: qdrant/qdrant:dev
+    container_name: chatbot-qdrant
+    ports:
+      - "6333:6333"
+    volumes:
+      - qdrant-data:/qdrant/storage
+
+  ollama:
+    image: ollama/ollama:latest
+    container_name: chatbot-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama-data:/root/.ollama
+    restart: unless-stopped
+
   app:
     build:
       context: .
@@ -14,10 +42,8 @@
       - redis
       - qdrant
     restart: unless-stopped
-    command: >
-      bash -c "
-      echo 'Pulling phi3:mini model...';
-      ollama pull phi3:mini || true;
-      echo 'Starting Streamlit...';
-      streamlit run app.py --server.port=8501 --server.address=0.0.0.0
-      "
+
+volumes:
+  redis-data:
+  qdrant-data:
+  ollama-data:
