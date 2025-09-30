@@ -58,8 +58,17 @@ if user_input:
     # Save user msg
     add_message(session_id, "user", user_input)
 
+    SYSTEM_PROMPT = """You are a helpful, concise, and polite chatbot assistant.
+                    - Always keep responses short and clear.
+                    - Use Markdown formatting for readability.
+                    - If you don’t know something, say so instead of guessing.
+                    - Stay professional and avoid repetition.
+                    """
     # Call Ollama
-    response = ollama.chat(model="phi3:mini", messages=get_messages(session_id))
+    response = ollama.chat(
+        model="phi3:mini", 
+        messages=[{"role": "system", "content": SYSTEM_PROMPT}] + get_messages(session_id)
+    )
     bot_reply = response["message"]["content"]
 
     # Save assistant msg
